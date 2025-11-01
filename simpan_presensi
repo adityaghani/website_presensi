@@ -1,0 +1,21 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama = trim($_POST['nama']);
+    $nim = trim($_POST['nim']);
+    $keterangan = trim($_POST['keterangan']);
+    $tanggal = date("d-m-Y H:i");
+
+    if ($nama && $nim && $keterangan) {
+        $data = "$tanggal | $nama | $nim | $keterangan" . PHP_EOL;
+        file_put_contents("data.txt", $data, FILE_APPEND);
+        header("Location: data_presensi.php?success=1");
+        exit;
+    } else {
+        header("Location: index.php?error=1");
+        exit;
+    }
+} else {
+    header("Location: index.php");
+    exit;
+}
+?>
