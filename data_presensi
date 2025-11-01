@@ -1,0 +1,91 @@
+<?php
+$file = "data.txt";
+$data = file_exists($file) ? file($file, FILE_IGNORE_NEW_LINES) : [];
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Data Presensi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #4A89DC, #5D9CEC);
+      min-height: 100vh;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+    }
+    .container {
+      margin-top: 60px;
+    }
+    .table {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .btn-back {
+      background: #fff;
+      color: #4A89DC;
+      border-radius: 8px;
+      text-decoration: none;
+      padding: 6px 12px;
+      font-weight: 500;
+    }
+    .btn-back:hover {
+      background: #E6E9F0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="text-center mb-4 fw-bold">📋 Data Presensi Mahasiswa</h2>
+    <div class="text-center mb-3">
+      <a href="index.php" class="btn-back">← Kembali ke Form</a>
+    </div>
+
+    <?php if (isset($_GET['success'])): ?>
+      <div class="alert alert-success text-center">✅ Data presensi berhasil disimpan!</div>
+    <?php endif; ?>
+
+    <div class="table-responsive">
+      <table class="table table-bordered text-dark text-center align-middle">
+        <thead class="table-primary">
+          <tr>
+            <th>No</th>
+            <th>Tanggal</th>
+            <th>Nama</th>
+            <th>NIM</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php if (empty($data)): ?>
+            <tr><td colspan="5" class="text-center">Belum ada data presensi.</td></tr>
+          <?php else: ?>
+            <?php $no = 1; foreach ($data as $baris): 
+              list($tanggal, $nama, $nim, $keterangan) = explode(" | ", $baris);
+            ?>
+              <tr>
+                <td><?= $no++ ?></td>
+                <td><?= htmlspecialchars($tanggal) ?></td>
+                <td><?= htmlspecialchars($nama) ?></td>
+                <td><?= htmlspecialchars($nim) ?></td>
+                <td>
+                  <?php if ($keterangan === "Hadir"): ?>
+                    <span class="badge bg-success">Hadir</span>
+                  <?php elseif ($keterangan === "Izin"): ?>
+                    <span class="badge bg-warning text-dark">Izin</span>
+                  <?php else: ?>
+                    <span class="badge bg-danger">Alpa</span>
+                  <?php endif; ?>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
